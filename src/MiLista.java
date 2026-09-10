@@ -70,7 +70,7 @@ public class MiLista implements ListInterface{
 
     @Override
     public boolean add(Object object) {
-        return false;
+        return insertTail(object);
     }
 
     @Override
