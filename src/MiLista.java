@@ -75,7 +75,19 @@ public class MiLista implements ListInterface{
 
     @Override
     public boolean insert(ListNode node, Object object) {
-        return false;
+        try {
+            if (node == null) {
+                return insertHead(object);
+            }
+            ListNode nuevoNodo = new ListNode(object);
+            nuevoNodo.siguiente = node.siguiente;
+            node.siguiente = nuevoNodo;
+            return true;
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error");
+            return false;
+        }
+
     }
 
     @Override
