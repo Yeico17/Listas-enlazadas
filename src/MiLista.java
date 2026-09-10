@@ -1,5 +1,3 @@
-import java.util.Iterator;
-
 public class MiLista implements ListInterface{
     ListNode cabeza;
 
@@ -60,10 +58,12 @@ public class MiLista implements ListInterface{
 
     @Override
     public Object search(Object object) {
-        ListNode actual = cabeza;
-        while (actual != null){
-            if (object.equals(actual.dato,object))return actual.dato;
-            actual = actual.siguiente;
+        ListNode iterador = this.cabeza;
+        while (iterador != null) {
+            if (iterador.dato == null ? object == null : iterador.dato.equals(object)) {
+                return iterador;
+            }
+            iterador = iterador.siguiente;
         }
         return null;
     }
@@ -92,7 +92,16 @@ public class MiLista implements ListInterface{
 
     @Override
     public boolean insert(Object ob, Object object) {
-        return false;
+        try {
+            ListNode nodoReferencia = (ListNode) search(ob);
+            if (nodoReferencia == null) {
+                return false;
+            }
+            return insert(nodoReferencia, object);
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error");
+            return false;
+        }
     }
 
     @Override
@@ -131,62 +140,136 @@ public class MiLista implements ListInterface{
 
     @Override
     public boolean set(ListNode node, Object object) {
-        return false;
+        if (node == null) {
+            return false;
+        }
+        node.dato = object;
+        return true;
     }
 
     @Override
     public boolean remove(ListNode node) {
+        if (node == null || this.cabeza == null) {
+            return false;
+        }
+        if (this.cabeza == node) {
+            this.cabeza = this.cabeza.siguiente;
+            return true;
+        }
+        ListNode iterador = this.cabeza;
+        while (iterador.siguiente != null) {
+            if (iterador.siguiente == node) {
+                iterador.siguiente = node.siguiente;
+                return true;
+            }
+            iterador = iterador.siguiente;
+        }
         return false;
     }
 
     @Override
     public boolean contains(Object object) {
-        return false;
+        return search(object) != null;
     }
 
-    @Override
-    public Iterator<ListNode> iterator() {
-        return null;
-    }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        if (this.cabeza == null) {
+            return new Object[0];
+        }
+        Object[] arreglo = new Object[getSize()];
+        ListNode iterador = this.cabeza;
+        int i = 0;
+        while (iterador != null) {
+            arreglo[i] = iterador.dato;
+            i++;
+            iterador = iterador.siguiente;
+        }
+        return arreglo;
     }
 
     @Override
     public Object[] toArray(Object[] object) {
-        return new Object[0];
+        int tam = this.cabeza == null ? 0 : getSize();
+        Object[] arreglo = (object.length >= tam) ? object : new Object[tam];
+        ListNode iterador = this.cabeza;
+        int i = 0;
+        while (iterador != null) {
+            arreglo[i] = iterador.dato;
+            i++;
+            iterador = iterador.siguiente;
+        }
+        if (arreglo.length > tam) {
+            arreglo[tam] = null;
+        }
+        return arreglo;
     }
 
-    @Override
-    public Object getBeforeTo() {
-        return null;
-    }
 
     @Override
     public Object getBeforeTo(ListNode node) {
+        if (node == null || this.cabeza == null || this.cabeza == node) {
+            return null;
+        }
+        ListNode iterador = this.cabeza;
+        while (iterador.siguiente != null) {
+            if (iterador.siguiente == node) {
+                return iterador;
+            }
+            iterador = iterador.siguiente;
+        }
         return null;
     }
 
-    @Override
-    public Object getNextTo() {
-        return null;
-    }
 
     @Override
     public Object getNextTo(ListNode node) {
-        return null;
+        if (node == null) {
+            return null;
+        }
+        return node.siguiente;
     }
 
     @Override
     public MiLista subList(ListNode from, ListNode to) {
-        return null;
+        if (from == null || to == null) {
+            return null;
+        }
+        MiLista nueva = new MiLista();
+        ListNode iterador = from;
+        boolean encontroFin = false;
+        while (iterador != null) {
+            nueva.insertTail(iterador.dato);
+            if (iterador == to) {
+                encontroFin = true;
+                break;
+            }
+            iterador = iterador.siguiente;
+        }
+        if (!encontroFin) {
+            return null;
+        }
+        return nueva;
     }
 
     @Override
     public MiLista sortList() {
-        return null;
+        Object[] arreglo = toArray();
+        for (int i = 1; i < arreglo.length; i++) {
+            Object actual = arreglo[i];
+            int j = i - 1;
+            while (j >= 0 && ((Comparable) arreglo[j]).compareTo(actual) > 0) {
+                arreglo[j + 1] = arreglo[j];
+                j--;
+            }
+            arreglo[j + 1] = actual;
+        }
+        MiLista ordenada = new MiLista();
+        for (Object o : arreglo) {
+            ordenada.insertTail(o);
+        }
+        return ordenada;
     }
 
     @Override
