@@ -48,11 +48,14 @@ public class MiLista implements ListInterface{
         }
         return iterador.dato;
     }
-    
+
 
     @Override
     public Object get(ListNode node) {
-        return null;
+        if (node == null) {
+            return null;
+        }
+        return node.dato;
     }
 
     @Override
