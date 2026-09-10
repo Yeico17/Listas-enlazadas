@@ -39,8 +39,16 @@ public class MiLista implements ListInterface{
 
     @Override
     public Object getTail() {
-        return null;
+        if (this.cabeza == null) {
+            return null;
+        }
+        ListNode iterador = this.cabeza;
+        while (iterador.siguiente != null) {
+            iterador = iterador.siguiente;
+        }
+        return iterador.dato;
     }
+    
 
     @Override
     public Object get(ListNode node) {
