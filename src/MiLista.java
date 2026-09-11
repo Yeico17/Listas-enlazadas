@@ -274,8 +274,17 @@ public class MiLista implements ListInterface{
 
     @Override
     public String toString() {
-        return "MiLista{" +
-                "cabeza=" + cabeza +
-                '}';
+        StringBuilder sb = new StringBuilder("MiLista{");
+        ListNode iterador = this.cabeza;
+        while (iterador != null) {
+            sb.append(iterador.dato);
+            if (iterador.siguiente != null) {
+                sb.append(", ");
+            }
+            iterador = iterador.siguiente;
+        }
+        sb.append("}");
+        return sb.toString();
     }
+
 }
